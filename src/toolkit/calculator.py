@@ -1,3 +1,20 @@
+from toolkit.errors import null_expression
+from toolkit.errors import unknown_symbol
+from toolkit.errors import binary_operator
+from toolkit.errors import missing_operand
+from toolkit.errors import division_by_zero
+from toolkit.errors import wrong_number
+
+def validation(expression: str):
+    null_expression(expression)
+    unknown_symbol(expression)
+    binary_operator(expression)
+    missing_operand(expression)
+    division_by_zero(expression)
+    wrong_number(expression)
+
+
+
 def find_close(array: list, open_bracket_index: int) -> int:
     count_brackets = 0
     for i in range(open_bracket_index+1, len(array)):
