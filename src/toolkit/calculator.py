@@ -4,6 +4,7 @@ from toolkit.errors import binary_operator
 from toolkit.errors import missing_operand
 from toolkit.errors import division_by_zero
 from toolkit.errors import wrong_number
+from toolkit.errors import missing_bracket
 
 def validation(expression: str):
     null_expression(expression)
@@ -12,6 +13,8 @@ def validation(expression: str):
     missing_operand(expression)
     division_by_zero(expression)
     wrong_number(expression)
+    missing_bracket(expression)
+
 
 
 

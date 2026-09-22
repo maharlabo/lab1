@@ -75,6 +75,9 @@ def wrong_number(expression: str):
         if space != 0 and space != len(expression)-1 and expression[space+1:].replace(" ", "")[0].isdigit() and (expression[:space].replace(" ", "")[-1] == '-' or expression[:space].replace(" ", "")[-1] == '+') and (expression[:space].replace(" ", "")[-2] == '-' or expression[:space].replace(" ", "")[-2] == '+'):
             sys.stderr.write("Error: Wrong number")
             sys.exit(2)
+        if " ." in expression or ". " in expression:
+            sys.stderr.write("Error: Wrong number")
+            sys.exit(2)
     expression = expression.replace(" ", "")
     points = [i for i in range(len(expression)) if expression[i] == '.']
     for i in range(len(points)-1):
@@ -87,6 +90,12 @@ def wrong_number(expression: str):
         if points[i] == len(expression)-1:
             sys.stderr.write("Error: Wrong number")
             sys.exit(2)
-        if (not expression[points[i]-1].isdigit()) and (not expression[points[i]+1].isdigit()):
+        if (not expression[points[i]-1].isdigit()) or (not expression[points[i]+1].isdigit()):
             sys.stderr.write("Error: Wrong number")
             sys.exit(2)
+
+
+def missing_bracket(expression:str):
+    if expression.count("(") != expression.count(")"):
+        sys.stderr.write("Error: Missing bracket")
+        sys.exit(2)
