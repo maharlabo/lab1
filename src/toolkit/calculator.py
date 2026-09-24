@@ -38,19 +38,11 @@ def split_expression(expression: str) -> list:
     split_list = []
     expression = expression.replace(' ', '')
     for i in range(len(expression)):
-        if not expression[i].isdigit() or i == 0:
+        if (not expression[i].isdigit() and expression[i] != "/" and expression[i] != ".") or i == 0:
             split_list.append(expression[i])
-        elif expression[i] == "/" and i > 0:
-            if expression[i - 1] == "/":
-                split_list[-1] += expression[i]
-            else:
-                split_list.append(expression[i])
-        elif expression[i] == ".":
-            split_list[-1] += expression[i]
         elif expression[i].isdigit():
             if i >= 2:
-                if expression[i - 1].isdigit() or (
-                        (expression[i - 1] == '+' or expression[i - 1] == '-') and not expression[i - 2].isdigit()):
+                if expression[i - 1].isdigit() or expression[i-1] == "." or ((expression[i - 1] == '+' or expression[i - 1] == '-') and expression[i-2] != ')' and not expression[i - 2].isdigit()):
                     split_list[-1] += expression[i]
                 else:
                     split_list.append(expression[i])
@@ -59,6 +51,15 @@ def split_expression(expression: str) -> list:
                     split_list[-1] += expression[i]
                 else:
                     split_list.append(expression[i])
+        elif expression[i] == "/" and i > 0:
+            if split_list[-1] == "/":
+                split_list[-1] += expression[i]
+            else:
+                split_list.append(expression[i])
+        elif expression[i] == "/":
+            split_list.append(expression[i])
+        elif expression[i] == ".":
+            split_list[-1] += expression[i]
     return split_list
 
 
@@ -114,7 +115,6 @@ def tokenization(expression: str) -> str:
             result += tokenization("".join(split_list[i+1:close_bracket_index]))+split_list[i-1]+" "
             i = close_bracket_index
         i += 1
-
     return result
 
 def calculation(tokenized_expression: str) -> float:
@@ -132,19 +132,25 @@ def calculation(tokenized_expression: str) -> float:
                 stack.append(number1-number2)
             elif operation == '*':
                 stack.append(number1*number2)
-            elif operation == '/':
-                if number2 == 0:
-                    sys.stderr.write("Error: Division by zero")
-                    sys.exit(2)
-                stack.append(number1/number2)
             elif operation == '//':
                 if number2 == 0:
                     sys.stderr.write("Error: Division by zero")
                     sys.exit(2)
                 stack.append(number1//number2)
+            elif operation == '/':
+                if number2 == 0:
+                    sys.stderr.write("Error: Division by zero")
+                    sys.exit(2)
+                stack.append(number1/number2)
             elif operation == '%':
                 if number2 == 0:
                     sys.stderr.write("Error: Division by zero")
                     sys.exit(2)
                 stack.append(number1%number2)
     return stack[0]
+
+
+def calculate(expression: str):
+    validation(expression)
+    sys.stdout.write(str(calculation(tokenization(expression))))
+    sys.exit(0)

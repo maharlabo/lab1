@@ -35,10 +35,14 @@ def binary_operator(expression: str):
     if '///' in expression:
         sys.stderr.write("Error: Two binary operators")
         sys.exit(2)
-    operators = ('+', '-', '*', '%')
     for part1 in ('--', '-+', '+-', '++', '*', '%', '/'):
-        for part2 in operators:
+        for part2 in ('*', '%'):
             if part1+part2 in expression or part2+part1 in expression:
+                sys.stderr.write("Error: Two binary operators")
+                sys.exit(2)
+    for part1 in ('--', '-+', '+-', '++', '*', '%', '/'):
+        for part2 in ('+', '-', '*', '%'):
+            if part2+part1 in expression:
                 sys.stderr.write("Error: Two binary operators")
                 sys.exit(2)
     for part1 in ('--', '-+', '+-', '++'):
