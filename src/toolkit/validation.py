@@ -20,6 +20,9 @@ def missing_operand(expression: str):
     if expression[0] in ('*', '%', '/'):
         sys.stderr.write("Error: Missing operand")
         sys.exit(2)
+    if expression[-1] in ('+', '-', '*', '%', '/'):
+        sys.stderr.write("Error: Missing operand")
+        sys.exit(2)
     for part in ('+', '-', '*', '/', '%'):
         if part+')' in expression:
             sys.stderr.write("Error: Missing operand")
@@ -58,7 +61,7 @@ def undefined_measure(from_measure: str, to_measure: str, measures: list):
             is_found_from = True
         if to_measure in group["measures"]:
             is_found_to = True
-    if (not is_found_from) and (not is_found_to):
+    if (not is_found_from) or (not is_found_to):
         sys.stderr.write("Error: Undefined measure")
         sys.exit(2)
 

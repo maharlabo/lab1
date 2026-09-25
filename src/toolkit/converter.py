@@ -1,8 +1,8 @@
 import json
-from toolkit.validation import converter_validation
-from toolkit.convertation import convert
+from src.toolkit.validation import converter_validation
+from src.toolkit.convertation import convert
 
-with open("toolkit/measures.json") as file:
+with open("src/toolkit/measures.json") as file:
     measures = json.loads(file.read())
 
 

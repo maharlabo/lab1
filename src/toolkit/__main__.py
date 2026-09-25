@@ -1,7 +1,8 @@
 import argparse
+import json
 import sys
-from toolkit.calculator import expession_calculate
-from toolkit.converter import measures_convert
+from src.toolkit.calculator import expession_calculate
+from src.toolkit.converter import measures_convert
 
 def main():
     parser = argparse.ArgumentParser()
@@ -18,7 +19,16 @@ def main():
     args = parser.parse_args()
 
     if args.command == 'calc':
-        sys.stdout.write(expession_calculate(args.expression))
+        result = expession_calculate(args.expression)
+        sys.stdout.write(result)
+        with open("src/toolkit/history.json", "r") as f:
+            history = json.loads(f.read())
+        history.append({
+            "expression": args.expression,
+            "result": result
+        })
+        with open("src/toolkit/history.json", "w") as f:
+            f.write(json.dumps(history))
         sys.exit(0)
     elif args.command == 'convert':
         sys.stdout.write(measures_convert(args.value, args.from_input, args.to))
