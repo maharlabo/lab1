@@ -1,5 +1,6 @@
 import argparse
-from toolkit.calculator import calculate
+import sys
+from toolkit.calculator import expession_calculate
 
 def main():
     parser = argparse.ArgumentParser()
@@ -11,8 +12,8 @@ def main():
     args = parser.parse_args()
 
     if args.command == 'calc':
-        calculate(args.expression)
-
+        sys.stdout.write(expession_calculate(args.expression))
+        sys.exit(0)
 
 
 if __name__ == "__main__":
