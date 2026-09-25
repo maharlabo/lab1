@@ -3,6 +3,6 @@ from toolkit.validation import calculator_validation
 from toolkit.calculation import calculate
 
 
-def expession_calculate(expression: str):
+def expession_calculate(expression: str) -> str:
     calculator_validation(expression)
     return str(calculate(tokenize(expression)))

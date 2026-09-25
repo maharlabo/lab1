@@ -1,0 +1,31 @@
+[
+  {
+    "group": "length",
+    "type": "default",
+    "measures": {
+      "mm": 0.001,
+      "cm": 0.01,
+      "m": 1,
+      "km": 1000
+    }
+  },
+  {
+    "group": "mass",
+    "type": "default",
+    "measures": {
+      "g": 0.001,
+      "kg": 1
+    }
+  },
+  {
+    "group": "temperature",
+    "type": "formula",
+    "default_measure": "c",
+    "below_limit": -273,
+    "measures": {
+      "c": ["c", "c"],
+      "f": ["c*1.8+32", "(f-32)/1.8"],
+      "k": ["c+273", "k-273"]
+    }
+  }
+]

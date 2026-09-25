@@ -35,19 +35,9 @@ def binary_operator(expression: str):
     if '///' in expression:
         sys.stderr.write("Error: Two binary operators")
         sys.exit(2)
-    for part1 in ('--', '-+', '+-', '++', '*', '%', '/'):
-        for part2 in ('*', '%'):
-            if part1+part2 in expression or part2+part1 in expression:
-                sys.stderr.write("Error: Two binary operators")
-                sys.exit(2)
-    for part1 in ('--', '-+', '+-', '++', '*', '%', '/'):
+    for part1 in ('*', '%', '/'):
         for part2 in ('+', '-', '*', '%'):
             if part2+part1 in expression:
-                sys.stderr.write("Error: Two binary operators")
-                sys.exit(2)
-    for part1 in ('--', '-+', '+-', '++'):
-        for part2 in ('(', ')'):
-            if part1+part2 in expression or part2+part1 in expression:
                 sys.stderr.write("Error: Two binary operators")
                 sys.exit(2)
 
@@ -68,16 +58,22 @@ def undefined_measure(from_measure: str, to_measure: str, measures: list):
             is_found_from = True
         if to_measure in group["measures"]:
             is_found_to = True
-    if not (is_found_from and is_found_to):
+    if (not is_found_from) and (not is_found_to):
         sys.stderr.write("Error: Undefined measure")
         sys.exit(2)
 
 
 
 
-def measures_arent_compatible():
-    sys.stderr.write("Error: Measures aren't compatible")
-    sys.exit(2)
+def measures_arent_compatible(from_measure: str, to_measure: str, measures: list):
+    for group in measures:
+        if from_measure in group["measures"]:
+            group_from = group["group"]
+        if to_measure in group["measures"]:
+            group_to = group["group"]
+    if group_from != group_to:
+        sys.stderr.write("Error: Measures aren't compatible")
+        sys.exit(2)
 
 
 def wrong_number(expression: str):
@@ -124,5 +120,6 @@ def calculator_validation(expression: str):
     missing_bracket(expression)
 
 
-def converter_velidation(from_measure: str, to_measure:str, measures: list):
+def converter_validation(from_measure: str, to_measure:str, measures: list):
     undefined_measure(from_measure, to_measure, measures)
+    measures_arent_compatible(from_measure, to_measure, measures)

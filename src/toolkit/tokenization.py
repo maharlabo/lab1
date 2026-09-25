@@ -18,19 +18,42 @@ def is_number(number_string: str) -> bool:
 
 
 def split_expression(expression: str) -> list:
-    split_list = []
+    split_list:list = []
     expression = expression.replace(' ', '')
     for i in range(len(expression)):
-        if (not expression[i].isdigit() and expression[i] != "/" and expression[i] != ".") or i == 0:
+        if expression[i] == "(" and i > 1:
+            if split_list[-1] == "-":
+                split_list[-1] = "-1"
+                split_list.append("*")
+                split_list.append("(")
+            elif split_list[-1] == "+":
+                split_list[-1] = "("
+            else:
+                split_list.append("(")
+        elif expression[i] == "+" and i > 0:
+            if split_list[-1] == "-":
+                split_list[-1] = "-"
+            elif split_list[-1] == "+":
+                split_list[-1] = "+"
+            else:
+                split_list.append("+")
+        elif expression[i] == "-" and i > 0:
+            if split_list[-1] == "-":
+                split_list[-1] = "+"
+            elif split_list[-1] == "+":
+                split_list[-1] = "-"
+            else:
+                split_list.append("-")
+        elif (not expression[i].isdigit() and expression[i] != "/" and expression[i] != ".") or i == 0:
             split_list.append(expression[i])
         elif expression[i].isdigit():
             if i >= 2:
-                if expression[i - 1].isdigit() or expression[i-1] == "." or ((expression[i - 1] == '+' or expression[i - 1] == '-') and expression[i-2] != ')' and not expression[i - 2].isdigit()):
+                if expression[i - 1].isdigit() or expression[i-1] == "." or ((split_list[-1] == '+' or split_list[-1] == '-') and split_list[-2][-1] != ')' and not split_list[-2][-1].isdigit()):
                     split_list[-1] += expression[i]
                 else:
                     split_list.append(expression[i])
             elif i == 1:
-                if expression[i - 1].isdigit() or expression[i - 1] == '+' or expression[i - 1] == '-':
+                if expression[i - 1].isdigit() or split_list[-1] == '+' or split_list[-1] == '-':
                     split_list[-1] += expression[i]
                 else:
                     split_list.append(expression[i])
@@ -46,7 +69,7 @@ def split_expression(expression: str) -> list:
     return split_list
 
 
-def set_priority(split_list: list):
+def set_priority(split_list: list[str]):
     first_priority_operations = ['*', '/', '//', '%']
 
     i = 0
