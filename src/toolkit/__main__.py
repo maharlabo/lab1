@@ -5,7 +5,14 @@ from src.toolkit.calculator import expession_calculate
 from src.toolkit.converter import measures_convert
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="""
+
+Console toolkit with calculator and unit converter
+
+commands:
+  calc              Calculate an arithmetic expression
+  convert           Convert a value between units
+    """, formatter_class=argparse.RawTextHelpFormatter, usage="toolkit [-h] {calc,convert} ...")
     subparsers = parser.add_subparsers(dest='command')
 
     calc = subparsers.add_parser("calc")
