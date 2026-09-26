@@ -9,6 +9,16 @@ def convert(value: float, from_measure: str, to_measure: str, measures: list) ->
             break
     if group["type"] == "default":
         result = group["measures"][from_measure]*value/group["measures"][to_measure]
+        if "below_limit" in group:
+            default_value = group["measures"][from_measure]*value/group["measures"][group["default_measure"]]
+            if default_value < group["below_limit"]:
+                sys.stderr.write(f"{group["group"]} can't be below {group['below_limit']}")
+                sys.exit(2)
+        if "above_limit" in group:
+            default_value = group["measures"][from_measure] * value / group["measures"][group["default_measure"]]
+            if default_value > group["above_limit"]:
+                sys.stderr.write(f"{group["group"]} can't be above {group['above_limit']}")
+                sys.exit(2)
     elif group["type"] == "formula":
         default_measure = group["default_measure"]
         formula_from = group["measures"][from_measure][1]
@@ -17,12 +27,13 @@ def convert(value: float, from_measure: str, to_measure: str, measures: list) ->
         mid_result = calculate(tokenize(formula_from))
         formula_to = formula_to.replace(default_measure, str(mid_result))
         result = calculate(tokenize(formula_to))
-    if "below_limit" in group:
-        if result < group["below_limit"]:
-            sys.stderr.write(f"{group["group"]} can't be below {group['below_limit']}")
-            sys.exit(2)
-    if "above_limit" in group:
-        if result > group["above_limit"]:
-            sys.stderr.write(f"{group["group"]} can't be above {group['above_limit']}")
-            sys.exit(2)
+        if "below_limit" in group:
+            if mid_result < group["below_limit"]:
+                sys.stderr.write(f"{group["group"]} can't be below {group['below_limit']}")
+                sys.exit(2)
+        if "above_limit" in group:
+            if mid_result > group["above_limit"]:
+                sys.stderr.write(f"{group["group"]} can't be above {group['above_limit']}")
+                sys.exit(2)
+
     return result

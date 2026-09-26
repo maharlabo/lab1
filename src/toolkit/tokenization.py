@@ -22,7 +22,7 @@ def split_expression(expression: str) -> list:
     expression = expression.replace(' ', '')
     for i in range(len(expression)):
         if expression[i] == "(" and i > 1:
-            if split_list[-1] == "-":
+            if split_list[-1] == "-" and split_list[-2][-1] != ")" and (not split_list[-2][-1].isdigit()):
                 split_list[-1] = "-1"
                 split_list.append("*")
                 split_list.append("(")
@@ -31,7 +31,7 @@ def split_expression(expression: str) -> list:
             else:
                 split_list.append("(")
         elif expression[i] == "+" and i > 0:
-            if split_list[-1] == "-":
+            if split_list[-1] == "-" and split_list[-2][-1] != ")" and (not split_list[-2][-1].isdigit()):
                 split_list[-1] = "-"
             elif split_list[-1] == "+":
                 split_list[-1] = "+"
